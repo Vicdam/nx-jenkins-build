@@ -49,7 +49,8 @@ def splitJobs(String target, int bins) {
   def String baseSha = env.CHANGE_ID ? 'origin/master' : 'origin/master~1'
   def String raw
   raw = sh(script: "npx nx print-affected --base=${baseSha} --target=${target}", returnStdout: true)
-  def data = readJSON(text: raw)
+//   def data = readJSON(text: raw)
+  def props = readJSON text: '{ "key": "value" }'
 
   def tasks = data['tasks'].collect { it['target']['project'] }
 
