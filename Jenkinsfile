@@ -45,21 +45,21 @@ def distributed(String target, int bins) {
   return tasks
 }
 
-// def splitJobs(String target, int bins) {
-//   def String baseSha = env.CHANGE_ID ? 'origin/master' : 'origin/master~1'
-//   def String raw
-//   raw = sh(script: "npx nx print-affected --base=${baseSha} --target=${target}", returnStdout: true)
-//   def data = readJSON(text: raw)
+def splitJobs(String target, int bins) {
+  def String baseSha = env.CHANGE_ID ? 'origin/master' : 'origin/master~1'
+  def String raw
+  raw = sh(script: "npx nx print-affected --base=${baseSha} --target=${target}", returnStdout: true)
+  def data = readJSON(text: raw)
 
-//   def tasks = data['tasks'].collect { it['target']['project'] }
+  def tasks = data['tasks'].collect { it['target']['project'] }
 
-//   if (tasks.size() == 0) {
-//     return tasks
-//   }
+  if (tasks.size() == 0) {
+    return tasks
+  }
 
-//   // this has to happen because Math.ceil is not allowed by jenkins sandbox (╯°□°）╯︵ ┻━┻
-//   def c = sh(script: "echo \$(( ${tasks.size()} / ${bins} ))", returnStdout: true).toInteger()
-//   def split = tasks.collate(c)
+  // this has to happen because Math.ceil is not allowed by jenkins sandbox (╯°□°）╯︵ ┻━┻
+  def c = sh(script: "echo \$(( ${tasks.size()} / ${bins} ))", returnStdout: true).toInteger()
+  def split = tasks.collate(c)
 
-//   return split
-// }
+  return split
+}
